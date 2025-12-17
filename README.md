@@ -59,6 +59,7 @@ The core technical achievement was successfully stabilizing the environment by r
 - [Automated Data Lifecycle (TTL)](./docs/dynamodb-ttl.md)
 - [High-Performance Querying (GSI)](./docs/dynamodb-gsi.md)
 ---
+IAM Security & Least Privilege
 
 ## 🚀 How to Deploy & Verify
 
