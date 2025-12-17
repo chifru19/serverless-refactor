@@ -60,6 +60,7 @@ The core technical achievement was successfully stabilizing the environment by r
 - [High-Performance Querying (GSI)](./docs/dynamodb-gsi.md)
 ---
 IAM Security & Least Privilege
+IAM Security Audit Report
 
 ## 🚀 How to Deploy & Verify
 
