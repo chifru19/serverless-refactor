@@ -55,7 +55,9 @@ The core technical achievement was successfully stabilizing the environment by r
 * **Solution Implemented:** Required bypassing the AWS provider's default behavior and strictly synchronizing the shell environment by using:
     * `skip_credentials_validation = true` in the provider block.
     * Explicitly exporting `AWS_ENDPOINT_URL="http://localhost:4566"` to force the provider to target the LocalStack service.
-
+## 📖 Advanced Architecture Documentation
+- [Automated Data Lifecycle (TTL)](./docs/dynamodb-ttl.md)
+- [High-Performance Querying (GSI)](./docs/dynamodb-gsi.md)
 ---
 
 ## 🚀 How to Deploy & Verify
