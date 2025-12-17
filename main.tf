@@ -14,12 +14,10 @@ provider "aws" {
   access_key = "testing"
   secret_key = "testing"
 
-  # LocalStack Connectivity Fixes
   skip_credentials_validation = true
   skip_metadata_api_check     = true
   skip_requesting_account_id  = true
   
-  # Updated for AWS Provider v5.x
   s3_use_path_style           = true 
 
   endpoints {
@@ -37,18 +35,26 @@ resource "aws_dynamodb_table" "data_table" {
   hash_key       = "PK"
   range_key      = "SK"
 
-  attribute { name = "PK";     type = "S" }
-  attribute { name = "SK";     type = "S" }
-  attribute { name = "Status"; type = "S" }
+  # Corrected Attribute Syntax (No semicolons)
+  attribute {
+    name = "PK"
+    type = "S"
+  }
+  attribute {
+    name = "SK"
+    type = "S"
+  }
+  attribute {
+    name = "Status"
+    type = "S"
+  }
 
-  # Performance: Global Secondary Index for status-based queries
   global_secondary_index {
     name               = "StatusIndex"
     hash_key           = "Status"
     projection_type    = "ALL"
   }
 
-  # Data Lifecycle: Automated expiration
   ttl {
     attribute_name = "ExpiresAt"
     enabled        = true
@@ -60,10 +66,9 @@ resource "aws_dynamodb_table" "data_table" {
   }
 }
 
-# --- 3. IAM Security (Principle of Least Privilege) ---
+# --- 3. IAM Security ---
 resource "aws_iam_role" "lambda_exec_role" {
   name = "serverless_refactor_lambda_role"
-
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
     Statement = [{
@@ -77,35 +82,24 @@ resource "aws_iam_role" "lambda_exec_role" {
 resource "aws_iam_role_policy" "lambda_scoped_policy" {
   name = "lambda_scoped_policy"
   role = aws_iam_role.lambda_exec_role.id
-
   policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
       {
         Effect   = "Allow"
-        Action   = [
-          "dynamodb:PutItem",
-          "dynamodb:GetItem",
-          "dynamodb:UpdateItem",
-          "dynamodb:Query"
-        ]
-        # Scoped specifically to our table ARN
+        Action   = ["dynamodb:PutItem", "dynamodb:GetItem", "dynamodb:UpdateItem", "dynamodb:Query"]
         Resource = aws_dynamodb_table.data_table.arn
       },
       {
         Effect   = "Allow"
-        Action   = [
-          "logs:CreateLogGroup",
-          "logs:CreateLogStream",
-          "logs:PutLogEvents"
-        ]
+        Action   = ["logs:CreateLogGroup", "logs:CreateLogStream", "logs:PutLogEvents"]
         Resource = "arn:aws:logs:*:*:*"
       }
     ]
   })
 }
 
-# --- 4. S3 Bucket & Lambda Function ---
+# --- 4. S3 & Lambda ---
 resource "aws_s3_bucket" "data_bucket" {
   bucket = var.s3_bucket_name
 }
@@ -116,10 +110,9 @@ resource "aws_lambda_function" "data_processor" {
   role          = aws_iam_role.lambda_exec_role.arn
   handler       = "lambda_handler.lambda_handler"
   runtime       = "python3.9"
-
   environment {
     variables = {
       TABLE_NAME = aws_dynamodb_table.data_table.name
     }
   }
-} 
+}
