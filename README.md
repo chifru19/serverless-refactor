@@ -21,6 +21,8 @@ graph TD
 
     Lambda -.-> IAM
     Lambda -.-> CW
+```  <-- MAKE SURE THESE 3 BACKTICKS ARE HERE
+
 ## 🛠 Key Technical Decisions
 * **Zero Hardcoding**: All static ARNs were replaced with dynamic Terraform references to ensure 100% portability.
 * **Least Privilege Security**: IAM policies are scoped strictly to the specific S3 and DynamoDB resources created in this stack.
@@ -30,5 +32,3 @@ graph TD
 * **Infrastructure as Code:** Terraform (HCL)
 * **Cloud Provider:** AWS (S3, Lambda, DynamoDB, IAM)
 * **Local Development:** LocalStack (Mocking AWS services)
-* **DevOps Tools:** AWS CLI, GitHub
-* **Language:** Python (Lambda Logic)
