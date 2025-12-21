@@ -1,6 +1,11 @@
 # 🚀 Modular Serverless Data Pipeline
 
+This project demonstrates a production-grade, event-driven serverless architecture built with Terraform. It has been refactored from a monolithic "flat" structure into a **Layered Modular Architecture** to showcase scalable IaC best practices.
+
 ## 🏗 System Architecture
+
+The following diagram illustrates the event-driven flow where an S3 upload triggers a Lambda function to process data and update DynamoDB.
+
 ```mermaid
 graph TD
     User([User/Client]) -->|Uploads File| S3[S3 Trigger Bucket]
@@ -21,14 +26,3 @@ graph TD
 
     Lambda -.-> IAM
     Lambda -.-> CW
-```  <-- MAKE SURE THESE 3 BACKTICKS ARE HERE
-
-## 🛠 Key Technical Decisions
-* **Zero Hardcoding**: All static ARNs were replaced with dynamic Terraform references to ensure 100% portability.
-* **Least Privilege Security**: IAM policies are scoped strictly to the specific S3 and DynamoDB resources created in this stack.
-* **Modular Design**: Refactored from a monolithic structure to a layered modular architecture for improved scalability.
-
-## 🛠 Technology Stack
-* **Infrastructure as Code:** Terraform (HCL)
-* **Cloud Provider:** AWS (S3, Lambda, DynamoDB, IAM)
-* **Local Development:** LocalStack (Mocking AWS services)
